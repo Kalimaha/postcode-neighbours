@@ -1,0 +1,39 @@
+# Start from Ubuntu
+FROM ubuntu:14.04
+
+# Update packages
+RUN apt-get update
+
+# Install PostgreSQL
+RUN apt-get install -y postgresql postgresql-contrib
+
+# Configure PostgreSQL to start at boot
+RUN update-rc.d postgresql enable
+
+# Start PostgreSQL
+RUN service postgresql start
+
+# Install PostGIS
+RUN apt-get install -y postgis
+
+# Copy shapefiles
+RUN mkdir layers
+ADD resources/australia_postcodes layers
+
+# Switch user
+USER postgres
+
+# Start PostgreSQL
+RUN /etc/init.d/postgresql start
+
+# Allow connections
+RUN echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/9.3/main/pg_hba.conf
+
+# Allow external connections
+RUN echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
+
+# Expose port
+EXPOSE 5432
+
+# Default command
+CMD ["/usr/lib/postgresql/9.3/bin/postgres", "-D", "/var/lib/postgresql/9.3/main", "-c", "config_file=/etc/postgresql/9.3/main/postgresql.conf"]

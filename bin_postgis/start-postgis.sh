@@ -136,6 +136,11 @@ else
     # It will be owned by the docker db user
     su - postgres -c "createdb -O $POSTGRES_USER -T template_postgis $POSTGRES_DBNAME"
 fi
+
+# Install client
+apt-get install postgis
+
+
 # This should show up in docker logs afterwards
 su - postgres -c "psql -l"
 

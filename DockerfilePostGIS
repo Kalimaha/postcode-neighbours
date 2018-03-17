@@ -3,14 +3,9 @@ FROM ubuntu:14.04
 
 # Update packages
 RUN apt update
-# RUN apt-get install -y software-properties-common wget
-# RUN add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main"
-# RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-# RUN apt update
-RUN apt install -y postgresql postgresql-contrib
 
 # Install PostgreSQL
-# RUN apt-get install -y postgresql postgresql-contrib
+RUN apt install -y postgresql postgresql-contrib
 
 # Configure PostgreSQL to start at boot
 RUN update-rc.d postgresql enable
@@ -19,10 +14,7 @@ RUN update-rc.d postgresql enable
 RUN service postgresql start
 
 # Install PostGIS and GDAL
-# RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-# RUN apt update
-# RUN apt install -y postgis
-#postgresql-9.3-postgis-2.3
+RUN apt-get install -y postgis postgresql-9.3-postgis-2.1 gdal-bin
 
 # Switch user
 USER postgres

@@ -16,6 +16,9 @@ RUN service postgresql start
 # Install PostGIS
 RUN apt-get install -y postgis
 
+# Install GDAL
+RUN apt-get install gdal-bin
+
 # Switch user
 USER postgres
 

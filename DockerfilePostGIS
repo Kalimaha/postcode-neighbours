@@ -1,13 +1,13 @@
 # Start from Ubuntu
-FROM ubuntu:16.04
+FROM ubuntu:14.04
 
 # Update packages
 RUN apt update
-RUN apt-get install -y software-properties-common wget
-RUN add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main"
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-RUN apt update
-RUN apt install -y postgresql-9.6 postgresql-contrib-9.6
+# RUN apt-get install -y software-properties-common wget
+# RUN add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main"
+# RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+# RUN apt update
+RUN apt install -y postgresql postgresql-contrib
 
 # Install PostgreSQL
 # RUN apt-get install -y postgresql postgresql-contrib
@@ -19,10 +19,10 @@ RUN update-rc.d postgresql enable
 RUN service postgresql start
 
 # Install PostGIS and GDAL
-# RUN apt-get install -y software-properties-common
 # RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-# RUN apt-get update
-# RUN apt-get install -y postgis postgis-scripts gdal-bin
+# RUN apt update
+# RUN apt install -y postgis
+#postgresql-9.3-postgis-2.3
 
 # Switch user
 USER postgres
@@ -31,13 +31,13 @@ USER postgres
 RUN /etc/init.d/postgresql start
 
 # Allow connections
-RUN echo "host all all 0.0.0.0/0 trust" >> /etc/postgresql/9.6/main/pg_hba.conf
+RUN echo "host all all 0.0.0.0/0 trust" >> /etc/postgresql/9.3/main/pg_hba.conf
 
 # Allow external connections
-RUN echo "listen_addresses='*'" >> /etc/postgresql/9.6/main/postgresql.conf
+RUN echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
 
 # Expose port
 EXPOSE 5432
 
 # Default command
-CMD [ "/usr/lib/postgresql/9.6/bin/postgres", "-D", "/var/lib/postgresql/9.6/main", "-c", "config_file=/etc/postgresql/9.6/main/postgresql.conf" ]
+CMD [ "/usr/lib/postgresql/9.3/bin/postgres", "-D", "/var/lib/postgresql/9.3/main", "-c", "config_file=/etc/postgresql/9.3/main/postgresql.conf" ]

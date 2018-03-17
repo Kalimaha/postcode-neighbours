@@ -1,24 +1,35 @@
-FROM debian:stable
+# Start from Ubuntu
+FROM ubuntu:14.04
 
-RUN  export DEBIAN_FRONTEND=noninteractive
-ENV  DEBIAN_FRONTEND noninteractive
-RUN  dpkg-divert --local --rename --add /sbin/initctl
+# Update packages
+RUN apt-get update
 
-RUN apt-get -y update
-RUN apt-get -y install gnupg2 wget ca-certificates rpl pwgen
-RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-RUN apt-get -y update
+# Install PostgreSQL
+RUN apt-get install -y postgresql postgresql-contrib
 
-RUN apt-get install -y postgresql-client-10 postgresql-common postgresql-10 postgresql-10-postgis-2.4 postgresql-10-pgrouting netcat
+# Configure PostgreSQL to start at boot
+RUN update-rc.d postgresql enable
 
+# Start PostgreSQL
+RUN service postgresql start
+
+# Install PostGIS
+RUN apt-get install -y postgis
+
+# Switch user
+USER postgres
+
+# Start PostgreSQL
+RUN /etc/init.d/postgresql start
+
+# Allow connections
+RUN echo "host all all 0.0.0.0/0 trust" >> /etc/postgresql/9.3/main/pg_hba.conf
+
+# Allow external connections
+RUN echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
+
+# Expose port
 EXPOSE 5432
 
-ADD bin_postgis/setup.sh /setup.sh
-RUN chmod 0755 /setup.sh
-RUN /setup.sh
-
-ADD bin_postgis/start-postgis.sh /start-postgis.sh
-RUN chmod 0755 /start-postgis.sh
-
-CMD /start-postgis.sh
+# Default command
+CMD [ "/usr/lib/postgresql/9.3/bin/postgres", "-D", "/var/lib/postgresql/9.3/main", "-c", "config_file=/etc/postgresql/9.3/main/postgresql.conf" ]

@@ -1,16 +1,21 @@
 version: '2.1'
 
 services:
-  
+
   db:
     build:
       context: .
-      dockerfile: DockerfilePostGISUbuntu
+      dockerfile: DockerfilePostGIS
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_USER="postgis"
       - POSTGRES_PASS="postgis"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 5s
+      timeout: 30s
+      retries: 3
 
   web:
     build: .
@@ -21,4 +26,6 @@ services:
       - "3000:3000"
     depends_on:
       - db
-
+    depends_on:
+      db:
+        condition: service_healthy

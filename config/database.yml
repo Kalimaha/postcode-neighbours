@@ -1,11 +1,11 @@
 default: &default
-  adapter: postgis
-  encoding: unicode
+  adapter: postgresql
   host: db
-  username: postgis
-  password: postgis
+  username: postgres
+  password:
   pool: 5
   schema_search_path: public
+  template: template0
 
 development:
   <<: *default

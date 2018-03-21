@@ -1,0 +1,8 @@
+en-AU:
+  faker:
+    address:
+      state: [Victoria]
+      state_abbr: [VIC]
+      postcode: ['3###']
+      suburb: [Torquay, Jan Juc, Bellbrae, Freshwater Creek, Mount Duneed, Connewarre, Breamlea]
+

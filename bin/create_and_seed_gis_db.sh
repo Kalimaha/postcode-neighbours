@@ -7,7 +7,8 @@ echo "==================================================== 01 - Create DB: DONE"
 yes '' | sed 3q
 
 echo "================================================== 02 - Migrate DB: START"
-docker-compose run web bundle exec rake db:migrate
+docker-compose run web bundle exec rake db:migrate RAILS_ENV=test
+docker-compose run web bundle exec rake db:migrate RAILS_ENV=development
 echo "=================================================== 02 - Migrate DB: DONE"
 
 yes '' | sed 3q
@@ -39,5 +40,14 @@ echo "============================= 06 - Store layer into Development DB: START"
 docker exec surroundingsuburbs_db_1 ogr2ogr -f "PostgreSQL" PG:"dbname=app_development" suburbs.shp -nln suburbs -nlt PROMOTE_TO_MULTI -overwrite
 docker exec surroundingsuburbs_db_1 psql -c "SELECT COUNT(*) FROM suburbs;" app_development
 echo "============================== 06 - Store layer into Development DB: DONE"
+
+yes '' | sed 3q
+
+echo "======================================== 07 - Migrate non-gis data: START"
+docker-compose run web bundle exec rake db:seed RAILS_ENV=test
+docker exec surroundingsuburbs_db_1 psql -c "SELECT COUNT(*) FROM listings;" app_test
+docker-compose run web bundle exec rake db:seed RAILS_ENV=development
+docker exec surroundingsuburbs_db_1 psql -c "SELECT COUNT(*) FROM listings;" app_development
+echo "========================================= 07 - Migrate non-gis data: DONE"
 
 yes '' | sed 3q

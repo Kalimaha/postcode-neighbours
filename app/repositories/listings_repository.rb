@@ -1,0 +1,2 @@
+class ListingsRepository
+end

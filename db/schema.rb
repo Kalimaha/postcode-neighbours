@@ -17,19 +17,19 @@ ActiveRecord::Schema.define(version: 20180320223732) do
   enable_extension "postgis"
   enable_extension "postgis_topology"
 
-  create_table "listings", force: :cascade do |t|
-    t.string   "address",    null: false
-    t.string   "suburb",     null: false
+  create_table "listings", id: :serial, force: :cascade do |t|
+    t.string "address", null: false
+    t.string "suburb", null: false
     t.datetime "created_at"
     t.datetime "datetime"
     t.datetime "updated_at"
   end
 
-  create_table "spatial_ref_sys", primary_key: "srid", id: :integer, force: :cascade do |t|
-    t.string  "auth_name", limit: 256
+  create_table "spatial_ref_sys", primary_key: "srid", id: :integer, default: nil, force: :cascade do |t|
+    t.string "auth_name", limit: 256
     t.integer "auth_srid"
-    t.string  "srtext",    limit: 2048
-    t.string  "proj4text", limit: 2048
+    t.string "srtext", limit: 2048
+    t.string "proj4text", limit: 2048
   end
 
 # Could not dump table "suburbs" because of following StandardError

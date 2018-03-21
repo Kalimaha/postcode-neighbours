@@ -49,3 +49,21 @@ docker exec surroundingsuburbs_db_1 psql -c "SELECT COUNT(*) FROM listings;" app
 echo "========================================= 07 - Migrate non-gis data: DONE"
 
 yes '' | sed 3q
+
+echo "============================ 08 - Add centroids to suburbs in Test: START"
+docker exec surroundingsuburbs_db_1 psql -c 'ALTER TABLE "suburbs" ADD lon double precision;' app_test
+docker exec surroundingsuburbs_db_1 psql -c 'ALTER TABLE "suburbs" ADD lat double precision;' app_test
+docker exec surroundingsuburbs_db_1 psql -c 'UPDATE "suburbs" SET lon = ST_X(ST_Centroid(wkb_geometry));' app_test
+docker exec surroundingsuburbs_db_1 psql -c 'UPDATE "suburbs" SET lat = ST_Y(ST_Centroid(wkb_geometry));' app_test
+echo "============================= 08 - Add centroids to suburbs in Test: DONE"
+
+yes '' | sed 3q
+
+echo "===================== 09 - Add centroids to suburbs in Development: START"
+docker exec surroundingsuburbs_db_1 psql -c 'ALTER TABLE "suburbs" ADD lon double precision;' app_development
+docker exec surroundingsuburbs_db_1 psql -c 'ALTER TABLE "suburbs" ADD lat double precision;' app_development
+docker exec surroundingsuburbs_db_1 psql -c 'UPDATE "suburbs" SET lon = ST_X(ST_Centroid(wkb_geometry));' app_development
+docker exec surroundingsuburbs_db_1 psql -c 'UPDATE "suburbs" SET lat = ST_Y(ST_Centroid(wkb_geometry));' app_development
+echo "====================== 09 - Add centroids to suburbs in Development: DONE"
+
+yes '' | sed 3q

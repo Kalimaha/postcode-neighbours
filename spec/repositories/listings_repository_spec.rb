@@ -1,7 +1,29 @@
 require 'rails_helper'
 
 RSpec.describe ListingsRepository do
-  it 'runs' do
-    expect(2 + 3).to eq(5)
+  describe '.find_by_suburb' do
+    subject(:find_by_suburb)   { described_class.find_by_suburb(suburb: suburb) }
+
+    let(:suburb)               { 'Torquay' }
+    let(:neighbouring_suburb)  { 'Jan Juc' }
+    let(:far_away_suburb)      { 'Richmond' }
+    
+    before do
+      Listing.create(suburb: suburb, address: '42, Spam (Eggs)')
+      Listing.create(suburb: neighbouring_suburb, address: '42, Spam (Eggs)')
+      Listing.create(suburb: far_away_suburb, address: '42, Spam (Eggs)')
+    end
+
+    it 'finds all the listings for the given suburb and surroundings' do
+      expect(find_by_suburb.count).to eq(2)
+    end
+
+    context 'when there are no listings for the required suburb' do
+      let(:suburb) { 'Woolloomooloo' }
+
+      it 'returns an empty array' do
+				expect(find_by_suburb).to be_empty
+      end
+    end
   end
 end

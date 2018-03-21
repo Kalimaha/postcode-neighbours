@@ -44,8 +44,6 @@ echo "============================== 06 - Store layer into Development DB: DONE"
 yes '' | sed 3q
 
 echo "======================================== 07 - Migrate non-gis data: START"
-docker-compose run web bundle exec rake db:seed RAILS_ENV=test
-docker exec surroundingsuburbs_db_1 psql -c "SELECT COUNT(*) FROM listings;" app_test
 docker-compose run web bundle exec rake db:seed RAILS_ENV=development
 docker exec surroundingsuburbs_db_1 psql -c "SELECT COUNT(*) FROM listings;" app_development
 echo "========================================= 07 - Migrate non-gis data: DONE"

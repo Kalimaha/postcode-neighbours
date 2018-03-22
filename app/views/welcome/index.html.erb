@@ -18,7 +18,9 @@
       <input class="form-control" id="suburb" placeholder="e.g. Torquay">
     </div>
     <div class="col-2">
-      <button class="btn btn-primary" onclick="test();">Search</button>
+      <button class="btn btn-primary" onclick="test();">
+        <i class="fa fa-search"></i>&nbsp;Search
+      </button>
     </div>
   </div>
 
@@ -40,8 +42,8 @@
     data.forEach((row) => {
       l = JSON.parse(row)
       description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-      body = `<div class="card-body"><h5 class="card-title">${l.address} (${l.suburb})</h5>${description}</div>`
-      footer = '<div class="card-footer">more information here</div>'
+      body = `<div class="card-body"><h5 class="card-title">${l.address}</h5><h6 class="card-subtitle"><i class="fa fa-globe"></i>&nbsp;${l.suburb}</h6><hr>${l.description}</div>`
+      footer = `<div class="card-footer"><i class="fa fa-bed"></i>&nbsp;${l.bedrooms}&nbsp;&nbsp;<i class="fa fa-bath"></i>&nbsp;${l.bathrooms}&nbsp;&nbsp;<i class="fa fa-car"></i>&nbsp;${l.carports}</div>`
       html = `<div class="card">${body}${footer}</div><br>`
       $('#results').append(html)
     })
@@ -55,4 +57,10 @@
     $('#results').empty();
     $.post('/search', { suburb: $('#suburb').val() }, display_results)
   }
+
+  $('body').keyup((e) => {
+    if (e.keyCode === 13) { test() }
+  })
+
+  $('#suburb').focus();
 </script>

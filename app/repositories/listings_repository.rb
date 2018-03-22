@@ -12,7 +12,7 @@ class ListingsRepository
 
     def sql(suburb)
       <<-SQL.squish
-        SELECT l.address, l.suburb
+        SELECT *
         FROM listings l
         WHERE l.suburb IN (
           SELECT b.ssc_name

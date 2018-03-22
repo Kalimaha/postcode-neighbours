@@ -1,41 +1,58 @@
-<script>
-  function display_results(data) {
-    for (var i = 0 ; i < data.length ; i += 1) {
-      l = JSON.parse(data[i])
-      $('#results').append('<div class="listing"><b>' + l.address + '</b><br>' + l.suburb + '</div>')
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="v-space"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <h2>REAio #30</h2>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col-10">
+      <input class="form-control" id="suburb" placeholder="e.g. Torquay">
+    </div>
+    <div class="col-2">
+      <button class="btn btn-primary" onclick="test();">Search</button>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col-12">
+      <div id="results">
+        <p class="text-center">
+          Your results will be displayed here.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="application/javascript">
+  const display_results = (data) => {
+    data.forEach((row) => {
+      l = JSON.parse(row)
+      description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+      body = `<div class="card-body"><h5 class="card-title">${l.address} (${l.suburb})</h5>${description}</div>`
+      footer = '<div class="card-footer">more information here</div>'
+      html = `<div class="card">${body}${footer}</div><br>`
+      $('#results').append(html)
+    })
+
+    if (data.length == 0) {
+      $('#results').append('<p class="text-warning text-center">No results found for your search.</p>')
     }
   }
 
-  function test() {
-    clean()
+  const test = () => {
+    $('#results').empty();
     $.post('/search', { suburb: $('#suburb').val() }, display_results)
   }
-
-  function clean() {
-    $('#results').empty();
-  }
 </script>
-
-<div class="container">
-	<div class="wrapper">
-		<div>
-      <h2 id="test">REAio #30</h2>
-    </div>
-    <hr>
-		<div class="form">
-      <div>
-        <input id="suburb" placeholder="e.g. Torquay">
-      </div>
-      <div class="search">
-        <button onclick="test();">Search</button>
-      </div>
-    </div>
-    <div class="v-space"></div>
-    <div>
-      <h2>Results</h2>
-    </div>
-    <hr>
-    <div id="results">
-    </div>
-	<div>
-<div>

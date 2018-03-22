@@ -1,6 +1,6 @@
 # Surrounding Suburbs
 
-This is a project for REA's 30th REAio. The main goal is to find all the listings in a suburb selected by the user and to include in the result listings from surrounding suburbs as well. For example, if the user enters "_Torquay_", the search engine will return listings for Torquay, as well as Jan Juc, Bradlea and so forth. The core of this project is the search performed through PostGIS.
+This is a project for REA's 30th REAio. The main goal is to find all the listings in a suburb selected by the user and to include in the result listings from surrounding suburbs as well. For example, if the user enters "_Torquay_", the search engine will return listings for _Torquay_, as well as _Jan Juc_, _Breamlea_ and so forth. Listings from the selected suburb must be on top of course. The core of this project is the search performed through PostGIS.
 
 ![demo](resources/images/demo.gif)
 
